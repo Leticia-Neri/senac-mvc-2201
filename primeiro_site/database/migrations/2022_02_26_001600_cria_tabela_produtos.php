@@ -13,25 +13,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Clientes', function (Blueprint $table) {
+        Schema::create('Produtos', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('nome');
-            $table->string('endereco');
-            $table->string('email');
-            $table->bigInteger('telefone');
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_unicode_ci';
+            $table->string('descricao');
+            $table->double('preco', 12, 2);
+            $table->timestamps();
         });
     }
 
     /**
-     * Reverse the migrations
+     * Reverse the migrations.
      *
      * @return void
      */
     public function down()
     {
-        Schema::dropIfExists('Clientes');
+        Schema::dropIfExists('Produtos');
     }
 };

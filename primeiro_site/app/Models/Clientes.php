@@ -14,4 +14,8 @@ class Clientes extends Model
 
     protected $table = 'Clientes';
 
+    public function compras(){
+        return $this->hasMany(Vendas::class,'cliente_id');
+    }
+
 }

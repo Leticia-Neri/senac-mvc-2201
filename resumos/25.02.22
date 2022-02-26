@@ -1,0 +1,3 @@
+php artisan make: model Vendas
+php artisan make: migration nome --create Vendas
+php artisan migrate
