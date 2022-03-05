@@ -11,4 +11,6 @@ class ProdutosVenda extends Model
 
     protected $fillable = ['id', 'venda_id', 'prodtudo_id', 'quantidade', 'valor'];
     protected $table = 'ProdutosVenda';
+
+
 }

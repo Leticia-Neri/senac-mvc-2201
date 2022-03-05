@@ -11,4 +11,9 @@ class NotasFiscais extends Model
 
     protected $fillable = ['id','venda_id','valor','imposto'];
     protected $table = 'NotasFiscais';
+
+    public function venda(){
+        return $this->hasOne(Vendas::class, 'id');
+    }
+ 
 }
