@@ -36,3 +36,10 @@ Route::get('/cachorro', function(){
 
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::prefix('clientes')->group(function(){
+    Route::get('/listar', [App\Http\Controllers\ClientesController::class, 'listar'])->middleware('auth'); //Listando os dados do banco de dados. 
+});
