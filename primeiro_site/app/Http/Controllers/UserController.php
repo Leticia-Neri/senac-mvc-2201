@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Role;
+
 use DB;
 use Hash;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -15,11 +17,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $data = User::orderBy('id', 'DESC')->paginate(5);
 
-        return view('user.index', compact('data'))->with('i', ($request->input('page', 1) -1 ) * 5);
+        return view('users.index', compact('data'))->with('i', ($request->input('page', 1) -1 ) * 5);
     }
 
     /**
@@ -42,9 +44,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, ['name' => 'required', 
-                                   'email' => 'required|email|unique.users, email', 
-                                   'password' => 'required|same:confirm-password', 
+        $this->validate($request, ['name' => 'required',
+                                   'email' => 'required|email|unique.users, email',
+                                   'password' => 'required|same:confirm-password',
                                    'roles' => 'required']);
 
         $input = $request->all();
@@ -71,7 +73,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        return view('user.show', compact('user'));
+        return view('users.show', compact('user'));
     }
 
     /**
@@ -101,9 +103,9 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, ['name' => 'required', 
-                                   'email' => 'required|email|unique.users, email', 
-                                   'password' => 'required|same:confirm-password', 
+        $this->validate($request, ['name' => 'required',
+                                   'email' => 'required|email|unique.users, email',
+                                   'password' => 'required|same:confirm-password',
                                    'roles' => 'required']);
 
         $input = $request->all();

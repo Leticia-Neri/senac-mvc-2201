@@ -41,5 +41,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::prefix('clientes')->group(function(){
-    Route::get('/listar', [App\Http\Controllers\ClientesController::class, 'listar'])->middleware('auth'); //Listando os dados do banco de dados. 
+    Route::get('/listar', [App\Http\Controllers\ClientesController::class, 'listar'])->middleware('auth'); //Listando os dados do banco de dados.
+});
+
+Route::group(['middleware' => ['auth']], function(){
+    Route::resource('/users', App\Http\Controllers\UserController::class);
+    Route::resource('/roles', App\Http\Controllers\RoleController::class);
 });
