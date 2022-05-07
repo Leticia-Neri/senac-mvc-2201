@@ -1,8 +1,8 @@
-@extends('layouts.app') // This is the layout file used for the application
+@extends('layouts.app') 
 
-@section('content') // This is the content section of the layout file
+@section('content') 
 
-<div class="row"> // This is the row section of the page
+<div class="row"> 
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
             <h2>Usuários</h2>
@@ -42,11 +42,11 @@
     <td>{{ $user->email }}</td>
     <td>
 
-      @if(!empty($user->getRoleNames())) // This is the method that returns the roles of the user
+      @if(!empty($user->getRoleNames())) 
 
         @foreach($user->getRoleNames() as $v)
 
-           <label class="badge badge-success">{{ $v }}</label>
+           <label >{{ $v }}</label>
 
         @endforeach
 

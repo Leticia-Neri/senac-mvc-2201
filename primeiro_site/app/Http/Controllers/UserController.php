@@ -9,6 +9,9 @@ use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
 use App\Models\User;
+use Spatie\Permission\Models\Permission;
+
+
 
 class UserController extends Controller
 {
@@ -19,6 +22,17 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        /*
+        $user = User::create([ // create user admin
+            'name' => 'Leticia',
+            'email' => 'leticialima@leticialima.com',
+            'password' => bcrypt('123456')]);
+
+        $role = Role::create(['name' => 'Admin']); // create a new role called admin
+        $permissions = Permission::pluck('id','id')->all(); // get all permissions id
+        $role->syncPermissions($permissions); // assign all permissions to admin role
+        $user->assignRole([$role->id]); // assign role to user
+        */
         $data = User::orderBy('id', 'DESC')->paginate(5);
 
         return view('users.index', compact('data'))->with('i', ($request->input('page', 1) -1 ) * 5);
@@ -45,7 +59,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, ['name' => 'required',
-                                   'email' => 'required|email|unique.users, email',
+                                   'email' => 'required|email',
                                    'password' => 'required|same:confirm-password',
                                    'roles' => 'required']);
 
@@ -86,7 +100,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        $roles = Roles::pluck('name', 'name')->all();
+        $roles = Role::pluck('name', 'name')->all();
 
         $userRole = $user->roles->pluck('name', 'name')->all();
 
@@ -104,7 +118,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, ['name' => 'required',
-                                   'email' => 'required|email|unique.users, email',
+                                   'email' => 'required|email',
                                    'password' => 'required|same:confirm-password',
                                    'roles' => 'required']);
 

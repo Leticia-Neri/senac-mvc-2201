@@ -1,143 +1,54 @@
-<?php
+@extends('layouts.app')
 
-namespace App\Http\Controllers;
+@section('content')
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Spatie\Permission\Models\Role;
+<div class="row">
+    <div class="col-lg-12 margin-tb">
+        <div class="pull-left">
+            <h2> Dados do Usuário</h2>
+        </div>
 
-use DB;
-use Hash;
-use App\Models\User;
+        <div class="pull-right">
+            <a class="btn btn-primary" href="{{ route('users.index') }}"> Voltar</a>
+        </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
+            <strong>Nome:</strong>
 
-class UserController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $data = User::orderBy('id', 'DESC')->paginate(5);
+            {{ $user->name }}
 
-        return view('users.index', compact('data'))->with('i', ($request->input('page', 1) -1 ) * 5);
-    }
+        </div>
+    </div>
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $roles = Role::pluck('name', 'name')->all();
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
+            <strong>Email:</strong>
 
-        return view('users.create', compact('roles'));
-    }
+            {{ $user->email }}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request, ['name' => 'required',
-                                   'email' => 'required|email|unique.users, email',
-                                   'password' => 'required|same:confirm-password',
-                                   'roles' => 'required']);
+        </div>
+    </div>
 
-        $input = $request->all();
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
+            <strong>Perfil:</strong>
 
-        $input['password'] = Hash::make($input['password']);
+            @if(!empty($user->getRoleNames()))
 
-        $user = User::create($input);
+                @foreach($user->getRoleNames() as $v)
 
-        $user->assignRole($request->input('roles'));
+                    <label >{{ $v }}</label>
 
-        return redirect()->route('users.index')->with('success', 'Usuário criado com sucesso');
+                @endforeach
 
-    }
+            @endif
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+        </div>
+    </div>
+</div>
 
-     //mostar as info de um usuario especifico
-    public function show($id)
-    {
-        $user = User::find($id);
-
-        return view('users.show', compact('user'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $user = User::find($id);
-
-        $roles = Roles::pluck('name', 'name')->all();
-
-        $userRole = $user->roles->pluck('name', 'name')->all();
-
-        return view('users.edit', compact('user', 'roles', 'userRole'));
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $this->validate($request, ['name' => 'required',
-                                   'email' => 'required|email|unique.users, email',
-                                   'password' => 'required|same:confirm-password',
-                                   'roles' => 'required']);
-
-        $input = $request->all();
-
-        if(!empty($input['password'])){
-            $input['password'] = Hash::make($input['password']);
-        }else{
-            $input = Arr::expect($input, array('password'));
-        }
-
-        $user = User::find($id);
-
-        $user->update($input);
-
-        DB::table('model_has_roles')->where('model_id', $id)->delete();
-        $user->assignRole($request->input('roles'));
-
-        return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso');
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        User::find($id)->delete();
-
-        return redirect()->route('users.index')->with('success', 'Usuário removido com sucesso');
-
-    }
-}
+@endsection
