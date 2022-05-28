@@ -113,6 +113,21 @@ class VendedoresController extends Controller
     }
 
     public function checkVendedor(int $id):bool{
-        return true;
+        $vendedores = [ 1=>'Paulo',
+                        2=>'Carla',
+                        3=>'João',
+                        4=>'Leonardo'];
+
+        return array_key_exists($id, $vendedores);
+    }
+
+    public function getVendedor(int $id):string{
+
+        $vendedores = [ 1=>'Paulo',
+        2=>'Carla',
+        3=>'João',
+        4=>'Leonardo'];
+
+        return $vendedores[$id];
     }
 }
