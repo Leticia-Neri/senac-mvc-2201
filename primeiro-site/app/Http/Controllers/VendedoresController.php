@@ -112,4 +112,7 @@ class VendedoresController extends Controller
         return json_encode($ret);
     }
 
+    public function checkVendedor(int $id):bool{
+        return true;
+    }
 }

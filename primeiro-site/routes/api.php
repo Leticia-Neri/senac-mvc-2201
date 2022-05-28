@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->group(static function(){
+Route::middleware(['middleware' => 'auth.jwt', 'prefix'=>'v1'], function(){
     Route::get('/vendedores',[App\Http\Controllers\VendedoresController::class, 'index']);
     Route::post('/vendedores', [App\Http\Controllers\VendedoresController::class,'store']);
     Route::delete('/vendedores/{id}', [App\Http\Controllers\VendedoresController::class,'destroy']);
@@ -27,4 +27,5 @@ Route::prefix('v1')->group(static function(){
 });
 
 
+Route::post('login', [App\Http\Controllers\APIController::class, 'login']);
 
